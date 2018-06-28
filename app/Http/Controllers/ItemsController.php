@@ -15,6 +15,7 @@ class ItemsController extends Controller
     {
         $keyword = request()->keyword;
         $items = [];
+
         if ($keyword) {
             $client = new \RakutenRws_Client();
             $client->setApplicationId(env('RAKUTEN_APPLICATION_ID'));
@@ -24,7 +25,7 @@ class ItemsController extends Controller
                 'imageFlag' => 1,
                 'hits' => 20,
             ]);
-        }    
+         
         
             foreach ($rws_response->getData()['Items'] as $rws_item) {
                 $item = new Item();
@@ -34,11 +35,13 @@ class ItemsController extends Controller
                 $item->image_url = str_replace('?_ex=128x128', '', $rws_item['Item']['mediumImageUrls'][0]['imageUrl']);
                 $items[] = $item;
             }
-          return view('items.create', [
+        }
+
+        return view('items.create', [
             'keyword' => $keyword,
             'items' => $items,
         ]);
-        }
+    }
     
     public function show($id)
     {
